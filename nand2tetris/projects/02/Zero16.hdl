@@ -1,0 +1,24 @@
+CHIP Zero16 {
+    IN in[16],s;
+    OUT out;
+    PARTS:
+    Mux(a=in,
+    b[0]=false,
+    b[1]=false,
+    b[2]=false,
+    b[3]=false,
+    b[4]=false,
+    b[5]=false,
+    b[6]=false,
+    b[7]=false,
+    b[8]=false,
+    b[9]=false,
+    b[10]=false,
+    b[11]=false,
+    b[12]=false,
+    b[13]=false,
+    b[14]=false,
+    b[15]=false,
+    s=s,
+    out=out);
+}
