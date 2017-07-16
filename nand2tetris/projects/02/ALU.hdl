@@ -42,19 +42,24 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-    
+
+//prepare input x y    
     Zero16(in=x,s=zx,out=rx);
     Zero16(in=y,s=zy,out=ry);
-    Negate16(in=rx,s=nx,out=rrx);
-    Negate16(in=ry,s=ny,out=rry);
+    Not2Way16(in=rx,sel=nx,out=rrx);
+    Not2Way16(in=ry,sel=ny,out=rry);
 
+//calc
     Add16(a=rrx,b=rry,out=raddout);
     And16(a=rrx,b=rry,out=randout);
     
-    Mux16(a=randout,b=raddout,s=f,out=rout);
+    Mux16(a=randout,b=raddout,sel=f,out=rout);
+    
 
-    Negate16(in=rout,s=no,out=out);
+//prepare output
+    Not2Way16(in=rout,sel=no,out=rrout);
    
-    And(a=out[0],b=true,out=ng);
-    IsZero16(in=out,out=zr);
+    IsZero16(in=rrout,out=zr);
+    IsNeg16(in=rrout,out=ng);
+    Out16(in=rrout,out=out);
 }

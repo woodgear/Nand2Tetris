@@ -1,6 +1,11 @@
 CHIP IsZero16 {
     IN in[16];
     OUT out;
+    // in[0..15]==0 out=1 else out=0
     PARTS:
-    Or16Way(in);
+   Or8Way(in=in[0..7],out=of);
+   Or8Way(in=in[8..15],out=oe);
+   Not(in=of,out=nof);
+   Not(in=oe,out=noe);
+   And(a=nof,b=noe,out=out);
 }

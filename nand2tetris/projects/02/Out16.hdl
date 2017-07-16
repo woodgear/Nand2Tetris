@@ -1,0 +1,6 @@
+CHIP Out16 {
+    IN in[16];
+    OUT out[16];
+    PARTS:
+    Not2Way16(in=in,sel=false,out=out);
+}
