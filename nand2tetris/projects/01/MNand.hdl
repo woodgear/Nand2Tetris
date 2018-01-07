@@ -1,0 +1,15 @@
+ /**
+ * Nand gate:
+ * out = 0 if (a ==1 && b == 1)
+ *       1 otherwise
+ */
+
+
+CHIP MNand {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    And(a=a,b=b,out=andab);
+    Not(in = andab, out = out);
+}

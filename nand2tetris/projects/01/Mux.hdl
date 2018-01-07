@@ -9,6 +9,7 @@
  *       b otherwise
  */
 
+/**  A1
 CHIP Mux {
     IN a, b, sel;
     OUT out;
@@ -18,4 +19,19 @@ CHIP Mux {
     Not(in=sel,out=nots);
     Or(a=nots,b=b,out=pb);
     And(a=pa,b=pb,out=out);
+}
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+    PARTS:
+    Not(in=sel,out=ns);
+    Not(in=a,out=na);
+    Not(in=b,out=nb);
+    And3(a=na,b=b,c=sel,out=nabs);
+    And3(a=a,b=nb,c=ns,out=anbns);
+    And3(a=a,b=b,c=ns,out=abns);
+    And3(a=a,b=b,c=sel,out=abs);
+    Or4(a=nabs,b=anbns,c=abns,d=abs,out=out);
 }
