@@ -40,4 +40,49 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+    //按照P94 图5.9 实现实现的简单CPU
+    //A指令
+
+    //Reg A
+    //A指令 还是C指令 存储 A寄存器
+    //C指令 存A reg   
+    Mux16(a=instruction,b=outALU,sel=instruction[15],out=outAMux);
+    Not(in=instruction[15],out=isA);
+    Or(a=isA,b=instruction[5],out = writeA);
+    ARegister(in=outAMux,load=writeA,out=outA,out[0..14]=addressM);
+
+    And(a=instruction[4],b=instruction[15],out=writeD);
+    //Reg D
+    DRegister(in=outALU,load=writeD,out=outD);
+
+    And(a=instruction[3],b=instruction[15],out=writeM);
+
+    //C指令
+    //a位切换输入
+    Mux16(a=outA,b=inM,sel=instruction[12],out=X);
+    //c位控制计算
+    ALU(x=X,y=outD,zx=instruction[9],nx=instruction[8],zy=instruction[11],ny=instruction[10],f=instruction[7],no=instruction[6],out=outALU,out=outM,zr=outZR,ng=outNG);
+
+    DMux8Way(in=instruction[15],sel=instruction[0..2],a=NULL,b=JGT,c=JEQ,d=JGE,e=JLT,f=JNE,g=JLE,h=JMP);
+
+
+    Not(in=outZR,out=isNZ); //!0 = !0
+    And(a=isNZ,b=outNG,out=isLT); //< = <
+    Or(a=outNG,b=outZR,out=isLE);//<= < || =
+
+    Not(in=outNG,out=NNG); //>= = !<
+    And(a=isNZ,b=NNG,out=isGT);// > = !0 !<
+    
+
+    And(a=JGT,b=isGT,out=JMPJGT);
+    And(a=JEQ,b=outZR,out=JMPJEQ);
+    And(a=JGE,b=NNG,out=JMPJGE);
+    And(a=JLT,b=isLT,out=JMPJLT);
+    And(a=JNE,b=isNZ,out=JMPJNE);
+    And(a=JLE,b=isLE,out=JMPJLE);
+    And(a=JMP,b=true,out=JMPJMP);
+    Or8Way(in[0]=JMPJGT,in[1]=JMPJEQ,in[2]=JMPJGE,in[3]=JMPJLT,in[4]=JMPJNE,in[5]=JMPJLE,in[6]=JMPJMP,out=iSJUMP);
+
+    PC(in=outA,load=iSJUMP,inc=true,reset=reset,out[0..14]=pc);
 }
