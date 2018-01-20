@@ -69,3 +69,8 @@ a,b 的位数实际上无关紧要的 (一般都是总线宽度)
 再加上通过lockFlag 来存储寄存器 那么一切的基石就已经很稳妥了
 
 Mux DFF 通过其构建出选择逻辑 CPU 实际上就很简单了
+
+# 20秒从零开始搭建CPU
+
+![CPU](CPU.png)
+![Computer](Computer.png)
